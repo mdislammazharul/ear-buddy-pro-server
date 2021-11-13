@@ -46,6 +46,7 @@ async function run() {
         const usersCollection = database.collection('users');
         const ordersCollection = database.collection('orders');
         const reviewsCollection = database.collection('reviews');
+        const faqCollection = database.collection('faq');
 
         // services get
         app.get('/services', async (req, res) => {
@@ -71,20 +72,6 @@ async function run() {
             console.log(result);
             res.json(result);
         })
-
-        // ------------- dental doc -------------
-        app.get('/purchase', async (req, res) => {
-            const email = req.query.email;
-            const date = new Date(req.query.date).toLocaleDateString();
-
-            // filtering by email in dashboard
-            const query = { email: email, date: date }
-
-            const cursor = purchaseCollection.find(query);
-            const purchase = await cursor.toArray();
-            res.json(purchase);
-        })
-        // ---------------------------------------
 
         // orders post
         app.post('/orders', async (req, res) => {
@@ -131,6 +118,13 @@ async function run() {
             console.log(result);
             res.json(result)
         });
+
+        // get faq
+        app.get('/faq', async (req, res) => {
+            const cursor = faqCollection.find({});
+            const faq = await cursor.toArray();
+            res.send(faq);
+        })
 
         app.get('/users/:email', async (req, res) => {
             const email = req.params.email;
@@ -189,11 +183,3 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
     console.log(`listening at ${port}`)
 })
-
-// app.get('/users')
-// app.post('/users')
-// app.get('/users/:id')
-// app.put('/users/:id');
-// app.delete('/users/:id')
-// users: get
-// users: post
